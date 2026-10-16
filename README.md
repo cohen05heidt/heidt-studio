@@ -6,7 +6,9 @@ Plain HTML, CSS and JavaScript. No build step.
 
 ## Preview
 
-Double-click `START-PREVIEW.bat`. Your browser opens the site at `http://localhost:8080/` (it picks the next free port if 8080 is busy). Close the window to stop it.
+**Shareable link (GitHub Pages):** https://cohen05heidt.github.io/heidt-studio/ — repo https://github.com/cohen05heidt/heidt-studio. It updates about a minute after each push to `main`. The `noindex` line keeps it out of search results.
+
+**On this computer:** double-click `START-PREVIEW.bat`. Your browser opens the site at `http://localhost:8080/` (it picks the next free port if 8080 is busy). Close the window to stop it.
 
 ## What's on the page
 
