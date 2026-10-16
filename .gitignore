@@ -1,0 +1,8 @@
+# Full-resolution sources (screenshots, Higgsfield renders, logo trace) - kept locally, not shipped
+_src/
+
+# Local tooling
+.claude/
+*.zip
+Thumbs.db
+.DS_Store
