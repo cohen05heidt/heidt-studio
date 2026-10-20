@@ -757,7 +757,7 @@
     if (!WEB3FORMS_KEY) {
       if (CONTACT_EMAIL) {
         location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        say('Your email app should open with the request filled in. Press send to finish.', 'ok');
+        say('Your email app should open with the request filled in. Press send to finish. Nothing opened? Call or text (912) 677-0764.', 'ok');
       } else {
         say(isPreview ? 'Preview: the form isn’t connected yet. Add a Web3Forms key or email in assets/js/main.js before launch.' : 'This form isn’t connected yet. Please check back soon.', 'err');
       }
@@ -778,7 +778,7 @@
       state.items = []; state.inspired = ''; render();
       say(`Thanks, ${d.name.trim().split(' ')[0]}. Your project request is in — expect a reply with next steps soon.`, 'ok');
     } catch (err) {
-      say('Your request didn’t go through. Check your connection and press send again.', 'err');
+      say('Your request didn’t go through. Press send again, or call or text (912) 677-0764.', 'err');
     } finally {
       btn.disabled = false;
     }

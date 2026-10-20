@@ -18,7 +18,7 @@ Plain HTML, CSS and JavaScript. No build step.
 | Hero | **Render lens**: move over the blueprint of a client site and the real site shows through a circular lens. Press and hold to render it all. Cycles through all four sites. |
 | Launched & live strip | Links to the four case studies. |
 | Work | One explorer per client site (Nichols, Goose's, Millwood, A Fine Install). Picking a feature redraws the screenshot as a blueprint, then reveals the real section with a hotspot on that feature. Tools: Blueprint view, Full page (scrollable full screenshot), Live preview (the real site in a frame; A Fine Install blocks framing, so it opens in a new tab). Cards stack as you scroll on large screens. |
-| Lab | Live demos of the features: scroll-driven film (Millwood's build film), before/after slider, dot-matrix Georgia map with filters and a 90-minute radius, Goose's real tabbed pricing, A Fine Install's speed readout, Nichols' drone films, Millwood's counters, smart form pointer. |
+| Lab | Opens with "Welcome to The Lab": a giant title drawn as a blueprint outline that a scan line fills with baby blue, a description and a 3-step how-to. Then live demos of the features: scroll-driven film (Millwood's build film), before/after slider, dot-matrix Georgia map with filters and a 90-minute radius, Goose's real tabbed pricing, A Fine Install's speed readout, Nichols' drone films, Millwood's counters, smart form pointer. |
 | Process | Discover → Blueprint → Build → Launch. The HS mark evolves from sketch to blueprint to filled to glowing as you scroll. |
 | CTA band + Contact | Every **＋ Add** button on the page adds that feature to the **spec sheet** next to the form, and ticks it in the form. "Build me something like this" records which site inspired the request. A floating pill keeps count and links to the form. |
 
@@ -57,7 +57,7 @@ To add a fifth site: capture it the same way, copy one `<article class="case">` 
 
 1. **Delete the `noindex` line** in `index.html` (marked `PREVIEW ONLY`).
 2. **Connect the form.** In `assets/js/main.js`, paste a free Web3Forms access key into `WEB3FORMS_KEY` (https://web3forms.com, the key is emailed to you), or set `CONTACT_EMAIL` so requests open the visitor's email app. Until one is set, the form says it isn't connected yet.
-3. **Add your contact details** if you want them public: email, phone, Instagram/Facebook. There are none on the site yet (footer and contact section).
+3. **Contact details:** phone (912) 677-0764 and cohen.heidt13@gmail.com are in the contact section ("Prefer to talk?"), the footer, the mobile menu, the JSON-LD block and the form messages in `main.js`. If either changes, search the project for the old value. Add Instagram/Facebook links if you want them.
 4. **Point the share image at your domain.** Change `og:image` to the full URL (e.g. `https://heidtstudio.com/assets/img/brand/og.jpg`), add `<link rel="canonical" href="https://yourdomain/">`, and add `"url"` to the JSON-LD block.
 5. **Check with clients.** The site shows screenshots of all four sites and copies of the Nichols and Millwood hero films. Make sure each client is fine being featured.
 6. Upload to Hostinger the same way as the client sites (the `.gitignore` already keeps `_src/` out).
