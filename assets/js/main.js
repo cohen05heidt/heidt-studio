@@ -134,6 +134,7 @@
       lensView.style.setProperty('--r', `${L.r.toFixed(1)}px`);
       const full = L.r > fullR() * .8;
       lensView.classList.toggle('is-full', full);
+      lensView.classList.toggle('is-low', L.y > .7);
       readout.textContent = full ? 'RENDER 100%' : `RENDER · X ${L.x.toFixed(2)} Y ${L.y.toFixed(2)}`;
     }
     requestAnimationFrame(lensFrame);
@@ -219,6 +220,17 @@
   function stopCycle() {
     clearTimeout(cycleTimer);
     tabs.forEach(b => b.classList.remove('is-timing'));
+  }
+
+  // ===== Hero background film ================================================
+  // Phones get the lighter 720p cut; reduced-motion and data-saver visitors keep the still poster.
+  const heroFilm = $('#heroFilm');
+  if (heroFilm && !reduced && !(navigator.connection && navigator.connection.saveData)) {
+    heroFilm.src = innerWidth >= 900 ? 'assets/video/hero-film-1080.mp4' : 'assets/video/hero-film-720.mp4';
+    heroFilm.preload = 'auto';
+    const playFilm = () => { const p = heroFilm.play(); if (p) p.catch(() => {}); };
+    watch($('#top'), (on) => { on ? playFilm() : heroFilm.pause(); }, { threshold: 0.02 });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) heroFilm.pause(); else if (heroOn) playFilm(); });
   }
 
   // ===== Work: case explorers ================================================

@@ -15,6 +15,7 @@ Plain HTML, CSS and JavaScript. No build step.
 | Section | What it does |
 | --- | --- |
 | Intro | The HS mark is drawn as blueprint lines, then filled in. Plays once per visit. |
+| Hero background | A 10-second seamless loop made in Higgsfield (GPT Image 2.5 frame → Kling 3.0 Pro, same first and last frame): a bright blueprint world where glass website panels drift, lines draft themselves and light particles fall. `assets/video/hero-film-1080.mp4` (desktop, ~1 MB) and `hero-film-720.mp4` (phones, ~330 KB), poster `assets/img/brand/hero-film-poster.jpg`. A scan line sweeps down every 8 s and a "Scroll" cue sits in the left gutter. Reduced-motion and data-saver visitors get the still poster. Originals in `_src/hero-film/`. |
 | Hero | **Render lens**: move over the blueprint of a client site and the real site shows through a circular lens. Press and hold to render it all. Cycles through all four sites. |
 | Launched & live strip | Links to the four case studies. |
 | Work | One explorer per client site (Nichols, Goose's, Millwood, A Fine Install). Picking a feature redraws the screenshot as a blueprint, then reveals the real section with a hotspot on that feature. Tools: Blueprint view, Full page (scrollable full screenshot), Live preview (the real site in a frame; A Fine Install blocks framing, so it opens in a new tab). Cards stack as you scroll on large screens. |
