@@ -226,7 +226,7 @@
   // Phones get the lighter cut; reduced-motion and data-saver visitors keep the still poster.
   const heroFilm = $('#heroFilm');
   if (heroFilm && !reduced && !(navigator.connection && navigator.connection.saveData)) {
-    heroFilm.src = innerWidth >= 900 ? 'assets/video/logo-particles-1080.mp4' : 'assets/video/logo-particles-720.mp4';
+    heroFilm.src = innerWidth >= 900 ? 'assets/video/logo-particles-1080.mp4?v=2' : 'assets/video/logo-particles-720.mp4?v=2';
     heroFilm.preload = 'auto';
     const playFilm = () => { const p = heroFilm.play(); if (p) p.catch(() => {}); };
     watch($('#top'), (on) => { on ? playFilm() : heroFilm.pause(); }, { threshold: 0.02 });
