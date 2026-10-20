@@ -222,15 +222,43 @@
     tabs.forEach(b => b.classList.remove('is-timing'));
   }
 
-  // ===== Hero background film ================================================
-  // Phones get the lighter 720p cut; reduced-motion and data-saver visitors keep the still poster.
+  // ===== Hero background film: the HS logo forming ===========================
+  // Three candidates while the owner chooses: ?choose shows a picker, ?film=particles|blueprint|glass (or 1-3) picks one.
+  // Phones get the lighter cut; reduced-motion and data-saver visitors keep the still poster.
+  const FILMS = { particles: 'logo-particles', blueprint: 'logo-blueprint', glass: 'logo-glass' };
+  const FILM_KEYS = Object.keys(FILMS);
+  const qs = new URLSearchParams(location.search);
+  const asked = qs.get('film');
+  let heroPick = FILM_KEYS[(+asked || 0) - 1] || (FILMS[asked] ? asked : null) || local.get('hs-film', 'particles');
+  if (!FILMS[heroPick]) heroPick = 'particles';
   const heroFilm = $('#heroFilm');
-  if (heroFilm && !reduced && !(navigator.connection && navigator.connection.saveData)) {
-    heroFilm.src = innerWidth >= 900 ? 'assets/video/hero-film-1080.mp4' : 'assets/video/hero-film-720.mp4';
-    heroFilm.preload = 'auto';
-    const playFilm = () => { const p = heroFilm.play(); if (p) p.catch(() => {}); };
+  const motionOk = !reduced && !(navigator.connection && navigator.connection.saveData);
+  const playFilm = () => { if (!motionOk) return; const p = heroFilm.play(); if (p) p.catch(() => {}); };
+  function setFilm(key) {
+    heroPick = key;
+    const base = FILMS[key];
+    heroFilm.poster = `assets/img/brand/${base}-poster.jpg`;
+    if (motionOk) {
+      heroFilm.src = `assets/video/${base}-${innerWidth >= 900 ? 1080 : 720}.mp4`;
+      heroFilm.preload = 'auto';
+      if (heroOn) playFilm();
+    }
+    $$('#filmPick button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.film === key)));
+  }
+  if (heroFilm) {
+    setFilm(heroPick);
     watch($('#top'), (on) => { on ? playFilm() : heroFilm.pause(); }, { threshold: 0.02 });
     document.addEventListener('visibilitychange', () => { if (document.hidden) heroFilm.pause(); else if (heroOn) playFilm(); });
+    if (qs.has('choose') || asked) {
+      const pick = $('#filmPick');
+      pick.hidden = false;
+      $$('button', pick).forEach(b => b.addEventListener('click', () => {
+        setFilm(b.dataset.film);
+        local.set('hs-film', b.dataset.film);
+        qs.set('film', b.dataset.film);
+        history.replaceState(null, '', `?${qs}${location.hash}`);
+      }));
+    }
   }
 
   // ===== Work: case explorers ================================================

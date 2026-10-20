@@ -152,21 +152,27 @@ h1, h2, h3, p { margin: 0; }
 .hero { position: relative; padding-top: calc(var(--nav-h) + clamp(24px, 5vh, 64px)); background: var(--ice); overflow: hidden; }
 /* background film: a bright blueprint world of glass panels, looped */
 .hero__bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; background: var(--ice); }
-/* a blueprint scan line sweeps down through the hero every few seconds, leading the eye down the page */
-.hero__bg::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 0%, transparent 76%, rgba(137, 207, 240, .16) 95%, rgba(255, 255, 255, .95) 99.55%, rgba(75, 169, 224, .75) 99.8%, transparent 100%);
-  transform: translateY(-100%); animation: heroscan 8s var(--ease-io) 2.6s infinite;
-}
-@keyframes heroscan { 0% { transform: translateY(-100%); } 55%, 100% { transform: translateY(100%); } }
-.hero__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 72% 50%; transform: scale(1.04); animation: filmdrift 24s ease-in-out infinite alternate; }
-@keyframes filmdrift { to { transform: scale(1.1) translate(-1.2%, -1%); } }
+/* logo films are framed with the HS mark at 28% across; 20% keeps it behind the headline at any width */
+.hero__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 20% 50%; }
 .hero__wash {
   position: absolute; inset: 0;
   background:
-    linear-gradient(90deg, rgba(243, 250, 254, .9) 0%, rgba(243, 250, 254, .72) 30%, rgba(243, 250, 254, .18) 56%, rgba(243, 250, 254, 0) 70%),
-    linear-gradient(180deg, rgba(243, 250, 254, .55) 0%, rgba(243, 250, 254, 0) 18%, rgba(243, 250, 254, 0) 78%, var(--ice) 100%);
+    radial-gradient(ellipse 36% 26% at 27% 40%, rgba(243, 250, 254, .5), rgba(243, 250, 254, 0) 78%),
+    linear-gradient(180deg, rgba(243, 250, 254, .45) 0%, rgba(243, 250, 254, 0) 16%, rgba(243, 250, 254, 0) 82%, var(--ice) 100%);
 }
+/* a soft halo keeps the copy legible over the forming logo */
+.hero__title, .hero__lede { text-shadow: 0 0 22px rgba(243, 250, 254, .95), 0 0 3px rgba(243, 250, 254, .9); }
+.hero__title em { text-shadow: none; }
+
+/* temporary background picker (?choose) */
+.filmpick { position: fixed; left: clamp(12px, 2vw, 24px); bottom: clamp(12px, 2vw, 24px); z-index: 95; padding: 12px; border-radius: 18px; background: rgba(255, 255, 255, .9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 18px 40px -18px rgba(11, 34, 54, .55), 0 0 0 1px var(--baby-soft); }
+.filmpick[hidden] { display: none; }
+.filmpick .mono { color: var(--ink-blue); margin: 0 4px 8px; }
+.filmpick__btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.filmpick button { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px 9px 9px; border-radius: 999px; border: 1px solid var(--baby-soft); background: #fff; font: 500 14px/1 var(--f-body); }
+.filmpick button b { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ice); font: 500 11px/1 var(--f-mono); color: var(--ink-blue); }
+.filmpick button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.filmpick button[aria-pressed="true"] b { background: var(--baby); color: var(--ink); }
 /* scroll cue: a drop of light keeps falling down the left gutter */
 .scrollcue { position: absolute; left: 12px; bottom: clamp(40px, 6vh, 72px); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 14px; color: var(--ink-blue); text-decoration: none; }
 .scrollcue .mono { writing-mode: vertical-rl; letter-spacing: .32em; font-size: 10px; }
@@ -625,8 +631,8 @@ fieldset.field legend { padding: 0; margin-bottom: 10px; }
 }
 @media (max-width: 1100px) {
   .hero__inner { grid-template-columns: minmax(0, 1fr); min-height: 0; }
-  .hero__wash { background: linear-gradient(180deg, rgba(243, 250, 254, .7) 0%, rgba(243, 250, 254, .42) 40%, rgba(243, 250, 254, .18) 75%, var(--ice) 100%); }
-  .hero__film { height: 100svh; bottom: auto; object-position: 78% 40%; -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+  .hero__wash { background: linear-gradient(180deg, rgba(243, 250, 254, .5) 0%, rgba(243, 250, 254, .28) 40%, rgba(243, 250, 254, .12) 75%, var(--ice) 100%); }
+  .hero__film { height: 100svh; bottom: auto; object-position: 20% 50%; -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
   .scrollcue { position: relative; left: auto; bottom: auto; justify-self: center; flex-direction: row; gap: 12px; margin-top: 4px; }
   .scrollcue .mono { writing-mode: horizontal-tb; }
   .scrollcue__track { height: 40px; }
@@ -671,6 +677,7 @@ fieldset.field legend { padding: 0; margin-bottom: 10px; }
   .foot__nav { margin-left: 0; }
   .lens__switch button { font-size: 9.5px; padding: 8px 11px; }
   .slab__readout { display: none; }
+  .filmpick { left: 12px; right: 12px; bottom: auto; top: calc(var(--nav-h) + 8px); }
   .step { grid-template-columns: 40px minmax(0, 1fr); }
   .step h3 { font-size: 24px; }
   .pill { font-size: 14px; }
