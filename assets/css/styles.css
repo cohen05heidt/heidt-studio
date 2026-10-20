@@ -163,16 +163,6 @@ h1, h2, h3, p { margin: 0; }
 /* a soft halo keeps the copy legible over the forming logo */
 .hero__title, .hero__lede { text-shadow: 0 0 22px rgba(243, 250, 254, .95), 0 0 3px rgba(243, 250, 254, .9); }
 .hero__title em { text-shadow: none; }
-
-/* temporary background picker (?choose) */
-.filmpick { position: fixed; left: clamp(12px, 2vw, 24px); bottom: clamp(12px, 2vw, 24px); z-index: 95; padding: 12px; border-radius: 18px; background: rgba(255, 255, 255, .9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 18px 40px -18px rgba(11, 34, 54, .55), 0 0 0 1px var(--baby-soft); }
-.filmpick[hidden] { display: none; }
-.filmpick .mono { color: var(--ink-blue); margin: 0 4px 8px; }
-.filmpick__btns { display: flex; flex-wrap: wrap; gap: 6px; }
-.filmpick button { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px 9px 9px; border-radius: 999px; border: 1px solid var(--baby-soft); background: #fff; font: 500 14px/1 var(--f-body); }
-.filmpick button b { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ice); font: 500 11px/1 var(--f-mono); color: var(--ink-blue); }
-.filmpick button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-.filmpick button[aria-pressed="true"] b { background: var(--baby); color: var(--ink); }
 /* scroll cue: a drop of light keeps falling down the left gutter */
 .scrollcue { position: absolute; left: 12px; bottom: clamp(40px, 6vh, 72px); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 14px; color: var(--ink-blue); text-decoration: none; }
 .scrollcue .mono { writing-mode: vertical-rl; letter-spacing: .32em; font-size: 10px; }
@@ -676,9 +666,7 @@ fieldset.field legend { padding: 0; margin-bottom: 10px; }
   .form__row { grid-template-columns: minmax(0, 1fr); }
   .foot__nav { margin-left: 0; }
   .lens__switch button { font-size: 9.5px; padding: 8px 11px; }
-  .slab__readout { display: none; }
-  .filmpick { left: 12px; right: 12px; bottom: auto; top: calc(var(--nav-h) + 8px); }
-  .step { grid-template-columns: 40px minmax(0, 1fr); }
+  .slab__readout { display: none; }  .step { grid-template-columns: 40px minmax(0, 1fr); }
   .step h3 { font-size: 24px; }
   .pill { font-size: 14px; }
 }
