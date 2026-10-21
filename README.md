@@ -1,6 +1,6 @@
 # Heidt Studio — website
 
-The studio's own site: **"From blueprint to unforgettable."** Baby blue is the color of a blueprint, so the whole site is built around that idea: every client site first appears as a baby-blue line drawing, then renders into the finished build.
+The studio's own site: **"From idea to unforgettable."** Baby blue and white, with the real client sites up front: visitors scroll through the live builds, try every feature in the Lab, and add what they like to their project request.
 
 Plain HTML, CSS and JavaScript. No build step.
 
@@ -14,13 +14,13 @@ Plain HTML, CSS and JavaScript. No build step.
 
 | Section | What it does |
 | --- | --- |
-| Intro | The HS mark is drawn as blueprint lines, then filled in. Plays once per visit. |
-| Hero background | **Particle swarm**: thousands of baby-blue particles drift and swirl together into your exact HS logo behind the headline. A light sweep then crosses the logo and turns it solid, the logo holds for a couple of seconds, and a second sweep dissolves it back into particles that scatter, as a 12-second seamless loop. Drawn frame by frame from the logo vector (`_src/logo-films/anim.html`, `?mode=particles`, rendered with headless Chromium + ffmpeg). `assets/video/logo-particles-1080.mp4` (desktop, native 1920×1080, ~4.1 MB) and `-720.mp4` (phones, ~1.7 MB), poster `assets/img/brand/logo-particles-poster.jpg` (the solid logo). Reduced-motion and data-saver visitors get the poster. A "Scroll" cue sits in the left gutter. The blueprint-draft and glass-condense alternatives are kept in `_src/logo-films/unused/`. |
-| Hero | **Render lens**: move over the blueprint of a client site and the real site shows through a circular lens. Press and hold to render it all. Cycles through all four sites. |
+| Intro | The HS mark fades in solid and a sweep of light crosses it, with a loading counter. Plays once per visit. |
+| Hero background | **Particle swarm**: thousands of baby-blue particles drift and swirl together into your exact HS logo behind the headline. A light sweep then crosses the logo and turns it solid, the logo holds for a couple of seconds, and a second sweep dissolves it back into particles that scatter, as a 12-second seamless loop. Drawn frame by frame from the logo vector (`_src/logo-films/anim.html`, `?mode=particles`, rendered with headless Chromium + ffmpeg). Plain soft-blue background, no grid. `assets/video/logo-particles-1080.mp4` (desktop, native 1920×1080, ~4.0 MB) and `-720.mp4` (phones, ~1.7 MB), poster `assets/img/brand/logo-particles-poster.jpg` (the solid logo). Reduced-motion and data-saver visitors get the poster. A "Scroll" cue sits in the left gutter. The blueprint-draft and glass-condense alternatives are kept in `_src/logo-films/unused/`. |
+| Hero | **Live site screen**: a browser frame showing a client homepage. Hover it (or tap it on a phone) and it scrolls down the whole homepage (the `full-*.jpg` captures) with a slim scrollbar; move away and it glides back to the top. Cycles through all four sites with a crossfade. |
 | Launched & live strip | Links to the four case studies. |
-| Work | One explorer per client site (Nichols, Goose's, Millwood, A Fine Install). Picking a feature redraws the screenshot as a blueprint, then reveals the real section with a hotspot on that feature. Tools: Blueprint view, Full page (scrollable full screenshot), Live preview (the real site in a frame; A Fine Install blocks framing, so it opens in a new tab). Cards stack as you scroll on large screens. |
-| Lab | Opens with "Welcome to The Lab": a giant title drawn as a blueprint outline that a scan line fills with baby blue, a description and a 3-step how-to. Then live demos of the features: scroll-driven film (Millwood's build film), before/after slider, dot-matrix Georgia map with filters and a 90-minute radius, Goose's real tabbed pricing, A Fine Install's speed readout, Nichols' drone films, Millwood's counters, smart form pointer. |
-| Process | Discover → Blueprint → Build → Launch. The HS mark evolves from sketch to blueprint to filled to glowing as you scroll. |
+| Work | One explorer per client site (Nichols, Goose's, Millwood, A Fine Install). Picking a feature crossfades to the real section with a hotspot on that feature. Tools: Full page (scrollable full screenshot), Live preview (the real site in a frame; A Fine Install blocks framing, so it opens in a new tab). Cards stack as you scroll on large screens. |
+| Lab | Opens with "Welcome to The Lab": a giant baby-blue gradient title that stretches out as it arrives, an "8 live experiments" tag, a description and a 3-step how-to. Then live demos of the features: scroll-driven film (Millwood's build film), before/after slider (the empty backyard vs the finished deck, frames from that film: `mill-before.jpg` / `mill-after.jpg`), dot-matrix Georgia map with filters and a 90-minute radius, Goose's real tabbed pricing, A Fine Install's speed readout, Nichols' drone films, Millwood's counters, smart form pointer. |
+| Process | Discover → Design → Build → Launch. The step crossing the middle of the screen lights up as you scroll, at every screen size, and the HS mark grows with it: a small, pale shape, a clean baby-blue mark, the full gradient rising in, then glowing with a "Live" tag. On screens narrower than 1100px the mark sits above the steps and plays through them by itself while it's in view. |
 | CTA band + Contact | Every **＋ Add** button on the page adds that feature to the **spec sheet** next to the form, and ticks it in the form. "Build me something like this" records which site inspired the request. A floating pill keeps count and links to the form. |
 
 Calls to action leading to the form: nav, mobile menu, hero, every case ("Build me something like this"), every feature and Lab tile (＋ Add), Lab form tile, process, CTA band, footer and the floating pill.
@@ -28,7 +28,7 @@ Calls to action leading to the form: nav, mobile menu, hero, every case ("Build 
 ## Brand
 
 - **Logo:** your HS monogram, traced from your logo into a clean vector: `assets/img/brand/hs-mark.svg`. On the site it renders in a baby-blue gradient (white/ice version in the footer). The wordmark uses Montserrat to match your logo.
-- **Colors:** white `#FFFFFF`, ice `#F3FAFE`, baby blue `#89CFF0`, soft baby `#CDEBFA`, sky `#4BA9E0`, blueprint ink `#1E78B4`, text navy `#0B2236`.
+- **Colors:** white `#FFFFFF`, ice `#F3FAFE`, baby blue `#89CFF0`, soft baby `#CDEBFA`, sky `#4BA9E0`, deep blue `#1E78B4`, text navy `#0B2236`.
 - **Type:** Anybody Light (headlines), Instrument Sans (body), Martian Mono (labels), Montserrat (wordmark). All from Google Fonts.
 - **Figma:** brand board + full desktop homepage design, with color variables, text styles and button/chip components: https://www.figma.com/design/i540H809M1MB6ZqmlWRGty
 - `_src/logo-concepts/` holds four alternate H marks generated in Higgsfield, plus a 3D glass render in `_src/film/`. They aren't used on the site, since your HS logo was the better fit. They're also on the Figma brand page.
@@ -40,7 +40,7 @@ index.html
 assets/css/styles.css
 assets/js/main.js          form settings at the top
 assets/img/brand/          logo, share image, home-screen icon
-assets/img/work/           client screenshots (*.jpg) and their blueprint versions (*-bp.jpg), full-page captures (full-*.jpg)
+assets/img/work/           client screenshots (*.jpg), full-page captures (full-*.jpg), Millwood before/after frames
 assets/video/              Nichols drone films + Millwood build film (copied from those sites)
 _src/                      originals, logo trace, generators (not shipped, gitignored)
 ```
@@ -50,7 +50,7 @@ _src/                      originals, logo trace, generators (not shipped, gitig
 When a client site changes, re-capture it (needs Google Chrome installed):
 
 1. `_src/tools/shoot.ps1` captures hero shots, `_src/tools/cdp.ps1` captures scrolled sections and full pages into `_src/shots/`.
-2. `_src/tools/build-assets.ps1` makes the web-sized JPGs and the blueprint versions in `assets/img/work/`.
+2. `_src/tools/build-assets.ps1` makes the web-sized JPGs in `assets/img/work/`. It also writes blueprint versions (`*-bp.jpg`), which the site no longer uses: move them to `_src/unused-blueprint/` (the old ones are there).
 
 To add a fifth site: capture it the same way, copy one `<article class="case">` block in `index.html`, and add it to `SITES` in `main.js` if it should appear in the hero lens.
 

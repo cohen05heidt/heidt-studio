@@ -26,7 +26,6 @@
   const local = keep('localStorage');
   const session = keep('sessionStorage');
   const IMG = k => `assets/img/work/${k}.jpg`;
-  const BP = k => `assets/img/work/${k}-bp.jpg`;
   const loaded = new Map();
   const preload = (src) => {
     if (!loaded.has(src)) loaded.set(src, new Promise(res => { const i = new Image(); i.onload = i.onerror = () => res(); i.src = src; }));
@@ -44,7 +43,7 @@
 
   document.documentElement.classList.add('js');
 
-  // ===== Intro: the mark is drafted, then rendered ==========================
+  // ===== Intro: the mark fades in and a sweep of light crosses it ===========
   const intro = $('#intro');
   const ready = () => { document.body.classList.remove('is-loading'); document.body.classList.add('is-ready'); };
   if (!intro || reduced || session.get('hs-intro', false)) {
@@ -91,91 +90,114 @@
   }), { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
   $$('.reveal, .band').forEach(el => revealIO.observe(el));
 
-  // ===== Hero: render lens ====================================================
+  // crossfade an image to a new source: the new view fades in over the old one
+  async function swapImg(img, src) {
+    const my = img.swapToken = (img.swapToken || 0) + 1;
+    await preload(src);
+    if (my !== img.swapToken) return;
+    if (reduced) { img.src = src; return; }
+    const next = img.cloneNode();
+    next.removeAttribute('id');
+    next.alt = '';
+    next.src = src;
+    img.after(next);
+    try { await next.decode(); } catch (e) { /* decode not critical */ }
+    await next.animate([{ opacity: 0, transform: 'scale(1.03)' }, { opacity: 1, transform: 'none' }], { duration: 700, easing: 'cubic-bezier(.2,.7,.2,1)' }).finished.catch(() => {});
+    if (my === img.swapToken) {
+      img.src = src;
+      try { await img.decode(); } catch (e) { /* fine */ }
+    }
+    next.remove();
+  }
+
+  // ===== Hero: live site screen ===============================================
+  // Hover (or tap) the screen and it scrolls down the site's full homepage; otherwise it cycles the four sites.
   const SITES = {
-    nichols: { url: 'nicholsland.net', view: 'nichols-hero' },
-    goose: { url: 'goosesgroomroom.com', view: 'goose-hero' },
-    mill: { url: 'millwooddecking.com', view: 'mill-hero' },
-    afi: { url: 'afineinstall.com', view: 'afi-hero' },
+    nichols: { url: 'nicholsland.net', view: 'nichols-hero', page: 'full-nichols' },
+    goose: { url: 'goosesgroomroom.com', view: 'goose-hero', page: 'full-goose' },
+    mill: { url: 'millwooddecking.com', view: 'mill-hero', page: 'full-mill' },
+    afi: { url: 'afineinstall.com', view: 'afi-hero', page: 'full-afi' },
   };
   const ORDER = Object.keys(SITES);
-  const lensView = $('#lensView');
-  const lensBp = $('#lensBp');
-  const lensLive = $('#lensLive');
-  const lensUrl = $('#lensUrl');
-  const readout = $('#lensReadout');
+  const showView = $('#showView');
+  const showShot = $('#showShot');
+  const showPage = $('#showPage');
+  const showThumb = $('#showThumb');
+  const showUrl = $('#showUrl');
   const slab = $('#slab');
-  const tabs = $$('.lens__switch button');
+  const tabs = $$('.show__switch button');
   const CYCLE = 6500;
   let site = 'nichols';
   let heroOn = true;
-  let hovering = false;
-  let pressing = false;
-  let lastTouch = 0;
+  let browsing = false;
   let cycleTimer = 0;
-  const L = { x: .5, y: .5, r: 0, tx: .5, ty: .5, tr: 0 };
 
-  const baseR = () => clamp(lensView.clientWidth * .17, 64, 150);
-  const fullR = () => Math.hypot(lensView.clientWidth, lensView.clientHeight);
-
-  function lensFrame(t) {
-    if (heroOn) {
-      const idle = !hovering && performance.now() - lastTouch > 2500;
-      if (idle && !reduced) {
-        const s = t / 1000;
-        L.tx = .5 + .3 * Math.sin(s * .55);
-        L.ty = .48 + .26 * Math.sin(s * .8 + 1.3);
-        L.tr = baseR() * .85;
+  // glide the full-page capture down at reading speed, or back up to the top
+  async function browse(on) {
+    if (on === browsing) return;
+    browsing = on;
+    on ? stopCycle() : startCycle();
+    const key = site;
+    if (on) {
+      const src = IMG(SITES[key].page);
+      await preload(src);
+      if (!browsing || key !== site) return;
+      if (showPage.getAttribute('src') !== src) {
+        showPage.src = src;
+        try { await showPage.decode(); } catch (e) { /* fine */ }
+        if (!browsing || key !== site) return;
       }
-      const k = reduced ? 1 : .14;
-      L.x = lerp(L.x, L.tx, k); L.y = lerp(L.y, L.ty, k); L.r = lerp(L.r, L.tr, pressing ? .1 : k);
-      lensView.style.setProperty('--x', `${(L.x * 100).toFixed(2)}%`);
-      lensView.style.setProperty('--y', `${(L.y * 100).toFixed(2)}%`);
-      lensView.style.setProperty('--r', `${L.r.toFixed(1)}px`);
-      const full = L.r > fullR() * .8;
-      lensView.classList.toggle('is-full', full);
-      lensView.classList.toggle('is-low', L.y > .7);
-      readout.textContent = full ? 'RENDER 100%' : `RENDER · X ${L.x.toFixed(2)} Y ${L.y.toFixed(2)}`;
+      showPage.hidden = false;
     }
-    requestAnimationFrame(lensFrame);
+    const vh = showView.clientHeight;
+    const ph = Math.max(vh, showView.clientWidth * (showPage.naturalHeight / showPage.naturalWidth || 0));
+    const k = vh / ph;
+    const dur = on ? (ph - vh) / Math.max(260, vh * .8) : .9;
+    const ease = on ? 'cubic-bezier(.4,0,.6,1)' : 'cubic-bezier(.7,0,.2,1)';
+    showView.style.setProperty('--thumb', `${(k * 100).toFixed(1)}%`);
+    [showPage, showThumb].forEach(el => { el.style.transition = reduced ? 'none' : `transform ${dur.toFixed(2)}s ${ease}`; });
+    showPage.style.transform = on ? `translateY(${(vh - ph).toFixed(0)}px)` : 'none';
+    showThumb.style.transform = on ? `translateY(${((1 - k) / k * 100).toFixed(1)}%)` : 'none';
+    showView.classList.toggle('is-browsing', on);
   }
-  if (lensView) {
-    L.tr = baseR() * .85;
-    requestAnimationFrame(lensFrame);
-    watch($('#top'), (on) => { heroOn = on; on ? startCycle() : stopCycle(); }, { threshold: 0.05 });
+  // jump straight back to the top, e.g. before switching sites
+  function settle() {
+    browsing = false;
+    showView.classList.remove('is-browsing');
+    [showPage, showThumb].forEach(el => { el.style.transition = 'none'; el.style.transform = 'none'; });
+  }
 
-    const setFromEvent = (e) => {
-      const r = lensView.getBoundingClientRect();
-      L.tx = clamp((e.clientX - r.left) / r.width, 0, 1);
-      L.ty = clamp((e.clientY - r.top) / r.height, 0, 1);
-    };
-    lensView.addEventListener('pointerenter', (e) => { hovering = e.pointerType === 'mouse'; stopCycle(); setFromEvent(e); L.tr = pressing ? fullR() : baseR(); });
-    lensView.addEventListener('pointermove', (e) => { setFromEvent(e); lastTouch = performance.now(); if (!pressing) L.tr = baseR(); });
-    lensView.addEventListener('pointerleave', () => { hovering = false; pressing = false; lastTouch = performance.now(); startCycle(); });
-    lensView.addEventListener('pointerdown', (e) => { pressing = true; setFromEvent(e); L.tr = fullR(); lastTouch = performance.now(); });
-    addEventListener('pointerup', () => { if (pressing) { pressing = false; L.tr = baseR(); lastTouch = performance.now(); } });
+  if (showView) {
+    watch($('#top'), (on) => { heroOn = on; if (!on && browsing) settle(); on ? startCycle() : stopCycle(); }, { threshold: 0.05 });
+    showView.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') browse(true); });
+    showView.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') browse(false); });
+    showView.addEventListener('pointerup', (e) => { if (e.pointerType !== 'mouse') browse(!browsing); });
 
     // gentle 3D tilt toward the pointer
     if (fine && !reduced) {
-      const lens = $('#lens');
-      lens.addEventListener('pointermove', (e) => {
-        const r = lens.getBoundingClientRect();
+      const show = $('#show');
+      show.addEventListener('pointermove', (e) => {
+        const r = show.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - .5;
         const py = (e.clientY - r.top) / r.height - .5;
         slab.style.setProperty('--ry', `${(px * 7).toFixed(2)}deg`);
         slab.style.setProperty('--rx', `${(-py * 5).toFixed(2)}deg`);
       });
-      lens.addEventListener('pointerleave', () => { slab.style.setProperty('--ry', '0deg'); slab.style.setProperty('--rx', '0deg'); });
+      show.addEventListener('pointerleave', () => { slab.style.setProperty('--ry', '0deg'); slab.style.setProperty('--rx', '0deg'); });
     }
 
-    tabs.forEach(b => b.addEventListener('click', () => { setSite(b.dataset.site); lastTouch = performance.now(); }));
-    $('.lens__switch').addEventListener('keydown', (e) => {
+    tabs.forEach(b => b.addEventListener('click', () => setSite(b.dataset.site)));
+    $('.show__switch').addEventListener('keydown', (e) => {
       if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
       const i = ORDER.indexOf(site);
       const next = ORDER[(i + (e.key === 'ArrowRight' ? 1 : ORDER.length - 1)) % ORDER.length];
       setSite(next); tabs[ORDER.indexOf(next)].focus();
     });
-    addEventListener('load', () => ORDER.forEach(k => { preload(IMG(SITES[k].view)); preload(BP(SITES[k].view)); }));
+    addEventListener('load', () => {
+      ORDER.forEach(k => preload(IMG(SITES[k].view)));
+      // desktop visitors are likely to hover, so have the first full page ready
+      if (fine) setTimeout(() => preload(IMG(SITES[site].page)), 1200);
+    });
     document.addEventListener('visibilitychange', () => { document.hidden ? stopCycle() : startCycle(); });
   }
 
@@ -185,34 +207,17 @@
     site = key;
     const token = ++switching;
     tabs.forEach(b => { const on = b.dataset.site === key; b.setAttribute('aria-selected', String(on)); b.classList.remove('is-timing'); });
-    const v = SITES[key].view;
-    await Promise.all([preload(IMG(v)), preload(BP(v))]);
-    if (token !== switching) return;
-    lensUrl.textContent = SITES[key].url;
-    lensLive.alt = `Homepage of ${SITES[key].url}, a site built by Heidt Studio`;
-    if (reduced) { lensBp.src = BP(v); lensLive.src = IMG(v); startCycle(); return; }
-    // redraw: a scan line sweeps down, drafting the new blueprint behind it
-    const ghost = lensBp.cloneNode();
-    ghost.removeAttribute('id');
-    ghost.src = BP(v);
-    ghost.alt = '';
-    lensView.insertBefore(ghost, lensLive.nextSibling);
-    lensView.classList.add('is-switching');
-    const D = 760;
-    const scan = $('.slab__scan', lensView);
-    const a1 = ghost.animate([{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: D, easing: 'cubic-bezier(.7,0,.2,1)', fill: 'forwards' });
-    scan.animate([{ top: '-2%' }, { top: '101%' }], { duration: D, easing: 'cubic-bezier(.7,0,.2,1)' });
-    await a1.finished.catch(() => {});
-    lensBp.src = BP(v);
-    lensLive.src = IMG(v);
-    try { await lensLive.decode(); } catch (e) { /* decode not critical */ }
-    ghost.remove();
-    lensView.classList.remove('is-switching');
+    stopCycle();
+    if (browsing) settle();
+    showUrl.textContent = SITES[key].url;
+    showShot.alt = `Homepage of ${SITES[key].url}, a site built by Heidt Studio`;
+    await swapImg(showShot, IMG(SITES[key].view));
+    if (fine) preload(IMG(SITES[key].page));
     if (token === switching) startCycle();
   }
   function startCycle() {
     stopCycle();
-    if (reduced || hovering || !heroOn || document.hidden) return;
+    if (reduced || browsing || !heroOn || document.hidden) return;
     const t = tabs.find(b => b.dataset.site === site);
     if (t) { t.style.setProperty('--cycle', `${CYCLE}ms`); void t.offsetWidth; t.classList.add('is-timing'); }
     cycleTimer = setTimeout(() => setSite(ORDER[(ORDER.indexOf(site) + 1) % ORDER.length]), CYCLE);
@@ -226,7 +231,7 @@
   // Phones get the lighter cut; reduced-motion and data-saver visitors keep the still poster.
   const heroFilm = $('#heroFilm');
   if (heroFilm && !reduced && !(navigator.connection && navigator.connection.saveData)) {
-    heroFilm.src = innerWidth >= 900 ? 'assets/video/logo-particles-1080.mp4?v=2' : 'assets/video/logo-particles-720.mp4?v=2';
+    heroFilm.src = innerWidth >= 900 ? 'assets/video/logo-particles-1080.mp4?v=3' : 'assets/video/logo-particles-720.mp4?v=3';
     heroFilm.preload = 'auto';
     const playFilm = () => { const p = heroFilm.play(); if (p) p.catch(() => {}); };
     watch($('#top'), (on) => { on ? playFilm() : heroFilm.pause(); }, { threshold: 0.02 });
@@ -241,18 +246,15 @@
     const screen = $('.screen', c);
     const view = $('.screen__view', c);
     const live = $('.screen__live', c);
-    const bp = $('.screen__bp', c);
     const spot = $('.spot', c);
     const label = $('.spot__label', c);
     const full = $('.screen__full', c);
     const tools = $$('.tool', c);
     const picks = $$('.feat__pick', c);
     let current = picks[0] && picks[0].dataset.view;
-    let token = 0;
     let frame = null;
 
     const setMode = (mode) => {
-      screen.classList.toggle('is-blueprint', mode === 'blueprint');
       screen.classList.toggle('is-full', mode === 'full');
       screen.classList.toggle('is-live', mode === 'live');
       tools.forEach(t => t.setAttribute('aria-pressed', String(t.dataset.tool === mode)));
@@ -318,7 +320,7 @@
     };
     new ResizeObserver(placeLabel).observe(view);
 
-    async function select(btn) {
+    function select(btn) {
       picks.forEach(p => { const on = p === btn; p.setAttribute('aria-selected', String(on)); p.closest('.feat').classList.toggle('is-active', on); });
       setMode('none');
       const x = parseFloat(btn.dataset.x);
@@ -329,24 +331,12 @@
       const v = btn.dataset.view;
       if (v === current) return;
       current = v;
-      const my = ++token;
-      await Promise.all([preload(IMG(v)), preload(BP(v))]);
-      if (my !== token) return;
       live.alt = `${btn.querySelector('.feat__name').textContent} on ${c.dataset.site.replace('https://', '')}`;
-      if (reduced) { bp.src = BP(v); live.src = IMG(v); return; }
-      bp.getAnimations().forEach(a => a.cancel());
-      bp.src = BP(v);
-      // draft the blueprint down over the old view, then render it away
-      await bp.animate([{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: 520, easing: 'cubic-bezier(.7,0,.2,1)', fill: 'forwards' }).finished.catch(() => {});
-      if (my !== token) return;
-      live.src = IMG(v);
-      try { await live.decode(); } catch (e) { /* fine */ }
-      await bp.animate([{ clipPath: 'inset(0 0 0 0)' }, { clipPath: 'inset(100% 0 0 0)' }], { duration: 760, delay: 140, easing: 'cubic-bezier(.7,0,.2,1)', fill: 'forwards' }).finished.catch(() => {});
-      if (my === token) bp.getAnimations().forEach(a => a.cancel());
+      swapImg(live, IMG(v));
     }
 
     // warm the views for this case once it is close to the viewport
-    onVisible(c, () => picks.forEach(p => { preload(IMG(p.dataset.view)); preload(BP(p.dataset.view)); }), { rootMargin: '400px 0px' });
+    onVisible(c, () => picks.forEach(p => preload(IMG(p.dataset.view))), { rootMargin: '400px 0px' });
   }
 
   function autoScroll(box) {
@@ -647,26 +637,34 @@
   }, { threshold: .6 }));
 
   // ===== Process stage =========================================================
+  // The step crossing the middle of the screen is the current one, at every width. On narrow screens the
+  // mark sits above the steps, so while it is in view and no step is centred yet it plays through them itself.
   const stage = $('#stage');
   const stageLabel = $('#stageLabel');
   const steps = $$('.step');
-  const STEP_NAMES = ['Discover', 'Blueprint', 'Build', 'Launch'];
+  const STEP_NAMES = ['Discover', 'Design', 'Build', 'Launch'];
+  let stepNow = 1;
   const setStep = (n) => {
+    stepNow = n;
     stage.dataset.step = n;
     stageLabel.textContent = `0${n} · ${STEP_NAMES[n - 1]}`;
     steps.forEach(s => s.classList.toggle('is-on', +s.dataset.step === n));
   };
   if (stage) {
     const narrow = matchMedia('(max-width: 1100px)');
-    steps.forEach(s => watch(s, (on) => { if (on && !narrow.matches) setStep(+s.dataset.step); }, { rootMargin: '-42% 0px -42% 0px' }));
+    const centred = new Set();
+    let stageOn = false;
     let auto = 0;
-    watch(stage, (on) => {
+    const play = () => {
       clearInterval(auto);
-      if (on && narrow.matches && !reduced) {
-        let n = 1; setStep(1);
-        auto = setInterval(() => { n = n % 4 + 1; setStep(n); }, 2200);
-      }
-    }, { threshold: .4 });
+      if (stageOn && !centred.size && narrow.matches && !reduced) auto = setInterval(() => setStep(stepNow % 4 + 1), 2200);
+    };
+    steps.forEach(s => watch(s, (on) => {
+      if (on) { centred.add(s); setStep(+s.dataset.step); } else centred.delete(s);
+      play();
+    }, { rootMargin: '-42% 0px -42% 0px' }));
+    watch(stage, (on) => { stageOn = on; play(); }, { threshold: .4 });
+    narrow.addEventListener('change', play);
     setStep(1);
   }
 
@@ -804,9 +802,8 @@
     addEventListener('pointermove', (e) => {
       mx = e.clientX; my = e.clientY;
       const host = e.target.closest && e.target.closest('[data-cursor]');
-      const overLens = e.target.closest && e.target.closest('.slab__view');
-      cur.classList.toggle('is-off', !!overLens);
-      cur.classList.toggle('is-big', !!host && !overLens);
+      cur.classList.remove('is-off');
+      cur.classList.toggle('is-big', !!host);
       if (host) lab.textContent = host.dataset.cursor;
     }, { passive: true });
     document.addEventListener('pointerleave', () => cur.classList.add('is-off'));

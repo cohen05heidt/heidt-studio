@@ -9,7 +9,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#89CFF0">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Heidt Studio — From blueprint to unforgettable">
+  <meta property="og:title" content="Heidt Studio — From idea to unforgettable">
   <meta property="og:description" content="Cinematic, interactive websites for local businesses. See the live work and play with every feature.">
   <meta property="og:image" content="assets/img/brand/og.jpg">
   <link rel="icon" href="assets/img/brand/hs-mark.svg" type="image/svg+xml">
@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:ital,wdth,wght@0,50..150,100..900;1,50..150,100..900&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;500&family=Montserrat:wght@400;500&display=swap">
-  <link rel="preload" as="image" href="assets/img/work/nichols-hero-bp.jpg">
+  <link rel="preload" as="image" href="assets/img/work/nichols-hero.jpg">
   <link rel="stylesheet" href="assets/css/styles.css">
   <script type="application/ld+json">
   {
@@ -25,7 +25,7 @@
     "@type": "ProfessionalService",
     "name": "Heidt Studio",
     "description": "Websites, branding and digital solutions for local businesses.",
-    "slogan": "From blueprint to unforgettable.",
+    "slogan": "From idea to unforgettable.",
     "telephone": "+1-912-677-0764",
     "email": "cohen.heidt13@gmail.com",
     "knowsAbout": ["Web design", "Web development", "Branding", "Interactive websites"]
@@ -49,12 +49,12 @@
     </defs>
   </svg>
 
-  <!-- Intro: the mark is drafted, then rendered -->
+  <!-- Intro: the mark fades in solid and a sweep of light crosses it -->
   <div class="intro" id="intro" aria-hidden="true">
     <div class="intro__stage">
-      <svg class="intro__mark" viewBox="-8 -8 120.27 116"><use width="104.27" height="100" href="#hs"/></svg>
+      <span class="intro__logo"><svg class="intro__mark" viewBox="0 0 104.27 100"><use width="104.27" height="100" href="#hs" fill="url(#hsGrad)"/></svg><span class="intro__shine"></span></span>
       <p class="intro__word">HEIDT <span>STUDIO</span></p>
-      <p class="intro__count mono"><span>Rendering</span> <b id="introCount">000</b>%</p>
+      <p class="intro__count mono"><span>Loading</span> <b id="introCount">000</b>%</p>
     </div>
   </div>
 
@@ -94,14 +94,14 @@
     <!-- ============ HERO ============ -->
     <section class="hero" id="top">
       <div class="hero__bg" aria-hidden="true">
-        <video class="hero__film" id="heroFilm" muted loop playsinline preload="none" poster="assets/img/brand/logo-particles-poster.jpg?v=2" tabindex="-1"></video>
+        <video class="hero__film" id="heroFilm" muted loop playsinline preload="none" poster="assets/img/brand/logo-particles-poster.jpg?v=3" tabindex="-1"></video>
         <span class="hero__wash"></span>
       </div>
       <div class="wrap hero__inner">
         <div class="hero__copy">
           <p class="eyebrow">Websites / Branding / Digital solutions</p>
           <h1 class="hero__title">
-            <span class="line">From blueprint</span>
+            <span class="line">From idea</span>
             <span class="line">to <em>unforgettable.</em></span>
           </h1>
           <p class="hero__lede">Heidt Studio designs and hand-codes cinematic, interactive websites for local businesses — scroll-driven films, live maps, instant quote forms. The kind of site customers remember and competitors copy.</p>
@@ -109,24 +109,23 @@
             <a class="btn btn--primary" href="#contact" data-cta="hero">Start your project <span class="btn__arrow" aria-hidden="true">→</span></a>
             <a class="btn btn--ghost" href="#work">See the work</a>
           </div>
-          <p class="hero__hint mono"><span class="pulse" aria-hidden="true"></span> Move over the blueprint to render it. Press to render all.</p>
+          <p class="hero__hint mono"><span class="pulse" aria-hidden="true"></span> Hover or tap the screen to scroll the whole site.</p>
         </div>
 
-        <div class="lens" id="lens">
-          <div class="slab" id="slab" data-cursor="Render">
+        <div class="show" id="show">
+          <div class="slab" id="slab" data-cursor="Scroll">
             <div class="slab__chrome" aria-hidden="true">
               <i></i><i></i><i></i>
-              <span class="url"><b class="live-dot"></b><span id="lensUrl">nicholsland.net</span></span>
-              <span class="slab__tag mono">LIVE BUILD</span>
+              <span class="url"><b class="live-dot"></b><span id="showUrl">nicholsland.net</span></span>
+              <span class="slab__tag mono">LIVE SITE</span>
             </div>
-            <div class="slab__view" id="lensView">
-              <img class="slab__bp" id="lensBp" src="assets/img/work/nichols-hero-bp.jpg" alt="" width="1600" height="1000">
-              <img class="slab__live" id="lensLive" src="assets/img/work/nichols-hero.jpg" alt="Homepage of nicholsland.net, a site built by Heidt Studio" width="1600" height="1000">
-              <span class="slab__scan" aria-hidden="true"></span>
-              <span class="slab__ring" id="lensRing" aria-hidden="true"><span class="slab__readout mono" id="lensReadout">RENDER · X 0.50 Y 0.50</span></span>
+            <div class="slab__view" id="showView">
+              <img class="slab__page" id="showPage" alt="" hidden>
+              <img class="slab__shot" id="showShot" src="assets/img/work/nichols-hero.jpg" alt="Homepage of nicholsland.net, a site built by Heidt Studio" width="1600" height="1000">
+              <span class="slab__bar" aria-hidden="true"><span id="showThumb"></span></span>
             </div>
           </div>
-          <div class="lens__switch" role="tablist" aria-label="Choose a launched site">
+          <div class="show__switch" role="tablist" aria-label="Choose a launched site">
             <button role="tab" aria-selected="true" data-site="nichols">nicholsland.net</button>
             <button role="tab" aria-selected="false" data-site="goose">goosesgroomroom.com</button>
             <button role="tab" aria-selected="false" data-site="mill">millwooddecking.com</button>
@@ -173,12 +172,10 @@
                 <div class="screen__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url"><b class="live-dot"></b>nicholsland.net</span></div>
                 <div class="screen__view">
                   <img class="screen__live" src="assets/img/work/nichols-hero.jpg" alt="nicholsland.net feature view" width="1600" height="1000" loading="lazy">
-                  <img class="screen__bp" src="assets/img/work/nichols-hero-bp.jpg" alt="" width="1600" height="1000" loading="lazy">
                   <div class="screen__full" hidden><img alt="Full homepage of nicholsland.net" loading="lazy" data-src="assets/img/work/full-nichols.jpg"></div>
                   <span class="spot" style="--x:62%;--y:34%"><span class="spot__label mono">3 rotating drone films</span></span>
                 </div>
                 <figcaption class="screen__tools">
-                  <button class="tool" data-tool="blueprint" aria-pressed="false">Blueprint</button>
                   <button class="tool" data-tool="full" aria-pressed="false">Full page</button>
                   <button class="tool" data-tool="live" aria-pressed="false">Live preview</button>
                 </figcaption>
@@ -226,12 +223,10 @@
                 <div class="screen__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url"><b class="live-dot"></b>goosesgroomroom.com</span></div>
                 <div class="screen__view">
                   <img class="screen__live" src="assets/img/work/goose-hero.jpg" alt="goosesgroomroom.com feature view" width="1600" height="1000" loading="lazy">
-                  <img class="screen__bp" src="assets/img/work/goose-hero-bp.jpg" alt="" width="1600" height="1000" loading="lazy">
                   <div class="screen__full" hidden><img alt="Full homepage of goosesgroomroom.com" loading="lazy" data-src="assets/img/work/full-goose.jpg"></div>
                   <span class="spot" style="--x:40.7%;--y:69%"><span class="spot__label mono">Book now → live calendar</span></span>
                 </div>
                 <figcaption class="screen__tools">
-                  <button class="tool" data-tool="blueprint" aria-pressed="false">Blueprint</button>
                   <button class="tool" data-tool="full" aria-pressed="false">Full page</button>
                   <button class="tool" data-tool="live" aria-pressed="false">Live preview</button>
                 </figcaption>
@@ -275,12 +270,10 @@
                 <div class="screen__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url"><b class="live-dot"></b>millwooddecking.com</span></div>
                 <div class="screen__view">
                   <img class="screen__live" src="assets/img/work/mill-hero.jpg" alt="millwooddecking.com feature view" width="1600" height="1000" loading="lazy">
-                  <img class="screen__bp" src="assets/img/work/mill-hero-bp.jpg" alt="" width="1600" height="1000" loading="lazy">
                   <div class="screen__full" hidden><img alt="Full homepage of millwooddecking.com" loading="lazy" data-src="assets/img/work/full-mill.jpg"></div>
                   <span class="spot" style="--x:50%;--y:45%"><span class="spot__label mono">Scroll = build</span></span>
                 </div>
                 <figcaption class="screen__tools">
-                  <button class="tool" data-tool="blueprint" aria-pressed="false">Blueprint</button>
                   <button class="tool" data-tool="full" aria-pressed="false">Full page</button>
                   <button class="tool" data-tool="live" aria-pressed="false">Live preview</button>
                 </figcaption>
@@ -328,12 +321,10 @@
                 <div class="screen__chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url"><b class="live-dot"></b>afineinstall.com</span></div>
                 <div class="screen__view">
                   <img class="screen__live" src="assets/img/work/afi-hero.jpg" alt="afineinstall.com feature view" width="1600" height="1000" loading="lazy">
-                  <img class="screen__bp" src="assets/img/work/afi-hero-bp.jpg" alt="" width="1600" height="1000" loading="lazy">
                   <div class="screen__full" hidden><img alt="Full homepage of afineinstall.com" loading="lazy" data-src="assets/img/work/full-afi.jpg"></div>
                   <span class="spot" style="--x:69%;--y:39%"><span class="spot__label mono">Live canvas animation</span></span>
                 </div>
                 <figcaption class="screen__tools">
-                  <button class="tool" data-tool="blueprint" aria-pressed="false">Blueprint</button>
                   <button class="tool" data-tool="full" aria-pressed="false">Full page</button>
                   <button class="tool" data-tool="live" aria-pressed="false">Live site ↗</button>
                 </figcaption>
@@ -387,11 +378,9 @@
             <p class="labhead__welcome">Welcome to</p>
             <h2 class="labhead__title">
               <span class="sr">Welcome to the Lab</span>
-              <span class="labhead__outline" aria-hidden="true">The Lab</span>
-              <span class="labhead__fill" aria-hidden="true">The Lab</span>
-              <span class="labhead__scan" aria-hidden="true"></span>
+              <span class="labhead__word" aria-hidden="true">The Lab</span>
             </h2>
-            <p class="labhead__dim mono" aria-hidden="true"><span>8 live experiments</span></p>
+            <p class="labhead__count mono" aria-hidden="true"><b class="live-dot"></b> 8 live experiments</p>
           </div>
           <div class="labhead__intro">
             <div>
@@ -421,13 +410,13 @@
           <article class="tile tile--ba reveal" id="lab-ba">
             <header class="tile__head"><p class="mono tile__seen">Seen on Millwood Decking</p><h3 class="tile__title">Before / after slider</h3></header>
             <div class="ba" id="ba" style="--pos:50%" data-cursor="Drag">
-              <img src="assets/img/work/mill-hero-bp.jpg" alt="Blueprint drawing of the Millwood Decking homepage" width="1600" height="1000" loading="lazy">
-              <img class="ba__after" src="assets/img/work/mill-hero.jpg" alt="Finished Millwood Decking homepage" width="1600" height="1000" loading="lazy">
-              <span class="ba__tag ba__tag--l mono">Blueprint</span><span class="ba__tag ba__tag--r mono">Live</span>
+              <img src="assets/img/work/mill-before.jpg" alt="A backyard before the deck was built" width="1280" height="720" loading="lazy">
+              <img class="ba__after" src="assets/img/work/mill-after.jpg" alt="The same backyard with a finished two-level Millwood deck" width="1280" height="720" loading="lazy">
+              <span class="ba__tag ba__tag--l mono">Before</span><span class="ba__tag ba__tag--r mono">After</span>
               <span class="ba__handle" aria-hidden="true"><span>⟷</span></span>
-              <input type="range" min="0" max="100" value="50" aria-label="Compare blueprint and finished site">
+              <input type="range" min="0" max="100" value="50" aria-label="Compare the backyard before and after the deck">
             </div>
-            <footer class="tile__foot"><p>Drag to render the blueprint into the finished site.</p><button class="add" data-add="Before / after slider" data-src="Lab">＋ Add to my build</button></footer>
+            <footer class="tile__foot"><p>Drag to see the finished deck. Perfect for remodels, builds and makeovers.</p><button class="add" data-add="Before / after slider" data-src="Lab">＋ Add to my build</button></footer>
           </article>
 
           <article class="tile tile--map reveal" id="lab-map">
@@ -526,11 +515,11 @@
         <div class="process__steps">
           <header class="head reveal">
             <p class="eyebrow">How a Heidt site gets made</p>
-            <h2 class="title">Drawn first. Then rendered.</h2>
+            <h2 class="title">From first call to launch day.</h2>
           </header>
           <ol class="steps">
             <li class="step" data-step="1"><span class="mono step__n">01</span><div><h3>Discover</h3><p>A conversation about your business, your customers and the one job the site has to do — book jobs, sell land, fill the calendar.</p></div></li>
-            <li class="step" data-step="2"><span class="mono step__n">02</span><div><h3>Blueprint</h3><p>We sketch the structure and the signature moment before any pixels: what loads first, what moves, where the call to action lives.</p></div></li>
+            <li class="step" data-step="2"><span class="mono step__n">02</span><div><h3>Design</h3><p>We plan the structure and the signature moment before writing code: what loads first, what moves, where the call to action lives.</p></div></li>
             <li class="step" data-step="3"><span class="mono step__n">03</span><div><h3>Build</h3><p>Hand-coded and mobile-first. Films, maps, pricing and forms built around your real content — no templates.</p></div></li>
             <li class="step" data-step="4"><span class="mono step__n">04</span><div><h3>Launch</h3><p>Domain, hosting, search basics and a quote form that lands in your inbox. Then it goes to work.</p></div></li>
           </ol>
@@ -539,19 +528,9 @@
         <div class="process__stage">
           <div class="stage" id="stage" data-step="1" aria-hidden="true">
             <svg class="stage__svg" viewBox="-30 -30 164.27 160">
-              <g class="stage__guides">
-                <circle cx="6.6" cy="42" r="40"/><circle cx="80" cy="76" r="24"/><circle cx="80" cy="76" r="12"/>
-                <line x1="-30" y1="0" x2="134" y2="0"/><line x1="-30" y1="100" x2="134" y2="100"/><line x1="-30" y1="47.9" x2="134" y2="47.9"/>
-                <line x1="0" y1="-30" x2="0" y2="130"/><line x1="13.3" y1="-30" x2="13.3" y2="130"/><line x1="48.7" y1="-30" x2="48.7" y2="130"/><line x1="61.9" y1="-30" x2="61.9" y2="130"/>
-              </g>
-              <g class="stage__dims">
-                <line x1="0" y1="-14" x2="104.27" y2="-14"/><text x="52" y="-18">104.27</text>
-                <line x1="118" y1="0" x2="118" y2="100"/><text x="121" y="52">100</text>
-                <line x1="-14" y1="0" x2="-14" y2="84.7"/><text x="-27" y="44">84.7</text>
-              </g>
               <use width="104.27" height="100" class="stage__glow" href="#hs" fill="url(#hsGrad)"/>
+              <use width="104.27" height="100" class="stage__base" href="#hs"/>
               <use width="104.27" height="100" class="stage__fill" href="#hs" fill="url(#hsGrad)"/>
-              <use width="104.27" height="100" class="stage__line" href="#hs"/>
             </svg>
             <span class="stage__label mono" id="stageLabel">01 · Discover</span>
             <span class="stage__live mono"><b class="live-dot"></b> Live</span>
@@ -562,7 +541,7 @@
 
     <!-- ============ CTA BAND ============ -->
     <section class="band">
-      <svg class="band__mark" viewBox="-4 -4 112.27 108" aria-hidden="true"><use width="104.27" height="100" href="#hs"/></svg>
+      <svg class="band__mark" viewBox="0 0 104.27 100" aria-hidden="true"><use width="104.27" height="100" href="#hs"/></svg>
       <div class="wrap band__inner reveal">
         <h2 class="band__title">Your competitors have a website.<br><em>You’re about to have this one.</em></h2>
         <div class="band__ctas">
